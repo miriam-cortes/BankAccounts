@@ -29,9 +29,8 @@ module Bank
   class Account
     attr_accessor :balance, :deposit_amount, :withdraw_amount, :accountnumber, :account_open_date
     @@account_hash = {}
-    def initialize(balance,account_open_date = "today")
-      # @id = Random.rand(100000..999999)
-      @account_owner
+    def initialize(balance,account_open_date = "time.now")
+      @id = Random.rand(100000..999999)
       @balance
       @account_open_date = account_open_date
 
@@ -40,10 +39,11 @@ module Bank
       else
         @balance = balance
       end
+      # "Thanks for giving me your money, Fool!"
       # puts "Thanks for opening an account with Mr. T!"
       # puts "Account number: #{@id}"
       show_current_balance
-      return "Thanks for giving me your money, Fool!"
+      return @balance
     end
 
     def self.reading_accounts
@@ -53,8 +53,8 @@ module Bank
         balance = account[1].to_f / 100
         account_open_date = account[2]
         @@account_hash[key] = self.new(balance,account_open_date)
-        # return @@account_hash
       end
+      return @@account_hash
     end
 
     def self.all
@@ -95,58 +95,59 @@ module Bank
     end
   end
 
-  ## WAVE 1 OPTIONAL...DIDN'T HAPPEN ##
-  # class Owner
-  #   attr_accessor :name, :city, :state, :zip
-  #   def initialize(user_details_hash)
-  #     @name = user_details_hash[:name]
-  #     @city = user_details_hash[:city]
-  #     @state = user_details_hash[:state]
-  #     @zip = user_details_hash[:zip]
-  #     @user_id
-  #     @user_balance
-  #     puts "You've got a user!"
-  #   end
-  #
-  #   def add_account_info_to_owner()
-  #     @user_balance = Bank::Account::balance
-  #     @user_id = Bank::Account::id
-  #   end
-  #
-  # end
+  ## WAVE 1 OPTIONAL ##
+  class Owner
+    attr_accessor :name, :city, :state, :zip
+
+    def initialize(user_details_hash)
+      @name = user_details_hash[:name]
+      @city = user_details_hash[:city]
+      @state = user_details_hash[:state]
+      @zip = user_details_hash[:zip]
+      @user_account_array = []
+    end
+
+    def add_account_info_to_owner(user_account)
+      @user_account_array << user_account
+      return @user_account_array
+    end
+
+  end
 
 end
 
-# puts "..........Opening a new account with $1.57 balance results in.........."
-# account1 = Bank::Account.new(1.57)
-# puts "..........a deposit of $3.........."
-# puts account1.deposit(3)
-# puts "..........Trying to withdraw $8.........."
-# puts account1.withdraw(8)
-# puts "..........Showing current balance.........."
-# puts account1.show_current_balance
-# puts "..........Depositing a negative.........."
-# puts account1.deposit(-3)
-# puts "..........Trying to withdraw $0.........."
-# puts account1.withdraw(0)
-# puts "..........Opening a new account with $0 balance results in.........."
-# puts account200 = Bank::Account.new(0)
+## WAVE 1 ##
+puts "..........Opening a new account with $1.57 balance results in.........."
+account1 = Bank::Account.new(1.57)
+ap account1
+puts "..........a deposit of $3.........."
+puts account1.deposit(3)
+puts "..........Trying to withdraw $8.........."
+puts account1.withdraw(8)
+puts "..........Showing current balance.........."
+puts account1.show_current_balance
+puts "..........Depositing a negative.........."
+puts account1.deposit(-3)
+puts "..........Trying to withdraw $0.........."
+puts account1.withdraw(0)
+puts "..........Opening a new account with $0 balance results in.........."
+puts "an error that I've commented out so the rest of the program will run." #account200 = Bank::Account.new(0)
 
+## WAVE 2 ##
 puts ".........Reading the csv file and putting it into a hash........."
 users = Bank::Account.reading_accounts
 ap users
-
 puts ".........Printing out all the accounts' information........."
 all_users = Bank::Account.all
 ap all_users
-
 puts ".........Printing out one accounts' information........."
 one_new_user = Bank::Account.find(15153)
 ap one_new_user
+puts ""
 
-## MY FAILED ATTEMPT AT DOING THE WAVE 1 OPTIONALS ##
-# user2_info = Bank::Owner.new(name:"name",city:"city",state:"state",zip:"zip")
-# puts "User 2's info: #{user2_info}"
-# user2_account = Bank::Account.new(5.67)
-# user2_info.add_account_info_to_owner
-##But how do I get the balance
+## WAVE 1 OPTIONALS ##
+user2_info = Bank::Owner.new(name:"name",city:"city",state:"state",zip:"zip")
+puts "User 2's info -\nname:#{user2_info.name} \naddress: #{user2_info.city}, #{user2_info.state} #{user2_info.zip}\n"
+user2_account = Bank::Account.new(5.67)
+connected_personal_and_account_info = user2_info.add_account_info_to_owner(user2_account)
+puts connected_personal_and_account_info
